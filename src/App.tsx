@@ -6,7 +6,7 @@ import { appTheme } from "./config/theme";
 function App() {
   return (
     <ThemeProvider theme={appTheme}>
-      <Box component="main" sx={{ height: "100vh" }}>
+      <Box component="main" sx={{ height: "100vh", backgroundColor: "#000" }}>
         <Header />
       </Box>
     </ThemeProvider>
