@@ -1,5 +1,6 @@
 import { Box, Button, Typography } from "@mui/material";
 import {
+  DataGrid,
   GridColDef,
   GridRenderCellParams,
   GridRowsProp,
@@ -53,9 +54,21 @@ export const CategoryList = () => {
           New Category
         </Button>
       </Box>
-      <Typography variant="h1" component="h1">
-        Category List
-      </Typography>
+      <div style={{ height: 400, width: "100%" }}>
+        <DataGrid
+          rows={rows}
+          pagination={true}
+          columns={columns}
+          filterMode="server"
+          paginationMode="server"
+          checkboxSelection={false}
+          disableColumnFilter={true}
+          disableColumnSelector={true}
+          disableDensitySelector={true}
+          componentsProps={componentProps}
+          components={{ Toolbar: GridToolbar }}
+        />
+      </div>
     </Box>
   );
 };
