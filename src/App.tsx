@@ -5,7 +5,7 @@ import { appTheme } from "./config/theme";
 import { Layout } from "./components/Layout";
 import { Route, Routes } from "react-router-dom";
 import { CreateCategory } from "./features/categories/CreateCategory";
-import { CategoryList } from "./features/categories/ListCaegory";
+import { CategoryList } from "./features/categories/ListCategory";
 import { EditCategory } from "./features/categories/EditCategory";
 
 function App() {
