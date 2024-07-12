@@ -32,7 +32,9 @@ const categoriesSlice = createSlice({
   name: "categories",
   initialState: initialState,
   reducers: {
-    createCategory(state, action) {},
+    createCategory(state, action) {
+      state.push(action.payload);
+    },
     updateCategory(state, action) {
       const index = state.findIndex(
         (category) => category.id === action.payload.id
