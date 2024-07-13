@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import {
   DataGrid,
   GridColDef,
@@ -7,10 +7,12 @@ import {
   GridToolbar,
 } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
-import { useAppSelector } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { deleteCategory, selectCategories } from "./categorySlice";
 
 export const CategoryList = () => {
   const categories = useAppSelector(selectCategories);
+  const dispatch = useAppDispatch();
 
   const componentProps = {
     toolbar: {
@@ -42,6 +44,10 @@ export const CategoryList = () => {
     },
   ];
 
+  function handleDeleteCategory(id: string) {
+    dispatch(deleteCategory(id));
+  }
+
   function renderIsActiveCell(row: GridRenderCellParams) {
     return (
       <Typography color={row.value ? "primary" : "secondary"}>
@@ -58,6 +64,18 @@ export const CategoryList = () => {
       >
         <Typography color="primary">{rowData.value}</Typography>
       </Link>
+    );
+  }
+
+  function renderActionsCell(params: GridRenderCellParams) {
+    return (
+      <IconButton
+        color="secondary"
+        onClick={handleDeleteCategory(params.value)}
+        aria-label="delete"
+      >
+        <DeleteIcon />
+      </IconButton>
     );
   }
 
