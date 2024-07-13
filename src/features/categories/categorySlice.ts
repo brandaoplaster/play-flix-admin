@@ -41,7 +41,12 @@ const categoriesSlice = createSlice({
       );
       state[index] = action.payload;
     },
-    deleteCategory(state, action) {},
+    deleteCategory(state, action) {
+      const index = state.findIndex(
+        (category) => category.id === action.payload.id
+      );
+      state.splice(index, 1);
+    },
   },
 });
 
