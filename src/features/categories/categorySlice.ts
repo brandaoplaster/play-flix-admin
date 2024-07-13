@@ -53,7 +53,7 @@ const categoriesSlice = createSlice({
 export const { createCategory, updateCategory, deleteCategory } =
   categoriesSlice.actions;
 
-export const selectCategory = (state: RootState) => state.categories;
+export const selectCategories = (state: RootState) => state.categories;
 export const selectCategoryById = (state: RootState, id: string) => {
   const category = state.categories.find((category) => category.id === id);
 
