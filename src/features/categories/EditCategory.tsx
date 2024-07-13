@@ -1,6 +1,6 @@
 import { Box, Paper, Typography } from "@mui/material";
-import { useAppSelector } from "../../app/hooks";
-import { Category, selectCategoryById } from "./categorySlice";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { Category, selectCategoryById, updateCategory } from "./categorySlice";
 import { useState } from "react";
 import { CategoryForm } from "./components/CategoryForm";
 import { useParams } from "react-router-dom";
@@ -9,19 +9,23 @@ export const EditCategory = () => {
   const id = useParams().id || "";
   const category = useAppSelector((state) => selectCategoryById(state, id));
   const [isdisabled, setIsdisabled] = useState(false);
+  const [categoryState, setCategoryState] = useState<Category>(category);
+  const dispatch = useAppDispatch();
 
-  const [categoryState, setCategoryState] = useState<Category>({
-    id: "",
-    name: "",
-    description: "",
-    is_active: false,
-    created_at: "",
-    deleted_at: "",
-    updated_at: "",
-  });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setCategoryState({ ...categoryState, [name]: value });
+  };
 
-  const handleChange = () => {};
-  const handleToggle = () => {};
+  const handleToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = e.target;
+    setCategoryState({ ...categoryState, [name]: checked });
+  };
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    dispatch(updateCategory(categoryState));
+  }
 
   return (
     <Box>
@@ -34,11 +38,11 @@ export const EditCategory = () => {
 
         <CategoryForm
           category={categoryState}
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+          handleToggle={handleToggle}
           isdisabled={isdisabled}
           isLoading={false}
-          handleSubmit={() => {}}
-          handleChange={handleChange}
-          handleToggle={handleToggle}
         />
       </Paper>
     </Box>
