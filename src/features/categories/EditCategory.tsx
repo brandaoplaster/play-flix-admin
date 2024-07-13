@@ -4,6 +4,7 @@ import { Category, selectCategoryById, updateCategory } from "./categorySlice";
 import { useState } from "react";
 import { CategoryForm } from "./components/CategoryForm";
 import { useParams } from "react-router-dom";
+import { useSnackbar } from "notistack";
 
 export const EditCategory = () => {
   const id = useParams().id || "";
@@ -11,6 +12,7 @@ export const EditCategory = () => {
   const [isdisabled, setIsdisabled] = useState(false);
   const [categoryState, setCategoryState] = useState<Category>(category);
   const dispatch = useAppDispatch();
+  const { enqueueSnackBar } = useSnackbar();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -25,6 +27,7 @@ export const EditCategory = () => {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     dispatch(updateCategory(categoryState));
+    enqueueSnackBar("Category updated successfully", { variant: "success" });
   }
 
   return (
