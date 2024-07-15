@@ -7,22 +7,31 @@ import { Route, Routes } from "react-router-dom";
 import { CreateCategory } from "./features/categories/CreateCategory";
 import { CategoryList } from "./features/categories/ListCategory";
 import { EditCategory } from "./features/categories/EditCategory";
+import { SnackbarProvider } from "notistack";
 
 function App() {
   return (
     <ThemeProvider theme={appTheme}>
-      <Box component="main" sx={{ height: "100vh", backgroundColor: "#000" }}>
-        <Header />
+      <SnackbarProvider
+        maxSnack={3}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+      >
+        <Box component="main" sx={{ height: "100vh", backgroundColor: "#000" }}>
+          <Header />
 
-        <Layout>
-          <Routes>
-            <Route path="/" element={<CategoryList />} />
-            <Route path="/categories" element={<CategoryList />} />
-            <Route path="/categories/create" element={<CreateCategory />} />
-            <Route path="/categories/edit/:id" element={<EditCategory />} />
-          </Routes>
-        </Layout>
-      </Box>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<CategoryList />} />
+              <Route path="/categories" element={<CategoryList />} />
+              <Route path="/categories/create" element={<CreateCategory />} />
+              <Route path="/categories/edit/:id" element={<EditCategory />} />
+            </Routes>
+          </Layout>
+        </Box>
+      </SnackbarProvider>
     </ThemeProvider>
   );
 }
