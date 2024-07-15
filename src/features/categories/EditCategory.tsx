@@ -12,7 +12,7 @@ export const EditCategory = () => {
   const [isdisabled, setIsdisabled] = useState(false);
   const [categoryState, setCategoryState] = useState<Category>(category);
   const dispatch = useAppDispatch();
-  const { enqueueSnackBar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -27,7 +27,7 @@ export const EditCategory = () => {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     dispatch(updateCategory(categoryState));
-    enqueueSnackBar("Category updated successfully", { variant: "success" });
+    enqueueSnackbar("Category updated successfully", { variant: "success" });
   }
 
   return (
