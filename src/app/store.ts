@@ -8,6 +8,7 @@ export const store = configureStore({
     counter: counterReducer,
     categories: categorySlice,
     [apiSlice.reducerPath]: apiSlice.reducer,
+    [categorySlice.reducerPath]: apiSlice.reducer,
   },
 });
 
