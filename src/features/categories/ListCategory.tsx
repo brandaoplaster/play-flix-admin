@@ -8,9 +8,14 @@ import {
 } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { deleteCategory, selectCategories } from "./categorySlice";
+import {
+  deleteCategory,
+  selectCategories,
+  useGetCategoriesQuery,
+} from "./categorySlice";
 
 export const CategoryList = () => {
+  const { data, isFetching, error } = useGetCategoriesQuery();
   const categories = useAppSelector(selectCategories);
   const dispatch = useAppDispatch();
 
@@ -21,13 +26,15 @@ export const CategoryList = () => {
     },
   };
 
-  const rows: GridRowsProp = categories.map((category) => ({
-    id: category.id,
-    name: category.name,
-    description: category.description,
-    isActive: category.is_active,
-    createdAt: category.created_at,
-  }));
+  const rows: GridRowsProp = data
+    ? data.data.map((category) => ({
+        id: category.id,
+        name: category.name,
+        description: category.description,
+        isActive: category.is_active,
+        createdAt: category.created_at,
+      }))
+    : [];
 
   const columns: GridColDef[] = [
     {
