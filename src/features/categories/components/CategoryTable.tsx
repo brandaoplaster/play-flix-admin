@@ -1,11 +1,14 @@
 import {
+  DataGrid,
   GridColDef,
   GridFilterModel,
   GridRenderCellParams,
+  GridRowsProp,
+  GridToolbar,
 } from "@mui/x-data-grid";
 import { Results } from "../../../types/Category";
 import { Link } from "react-router-dom";
-import { IconButton, Typography } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 type Props = {
@@ -118,5 +121,28 @@ export function CategoryTable({
   const rows = data ? mapDataToGridRows(data) : [];
   const rowCount = data?.meta.total || 0;
 
-  return;
+  return (
+    <Box sx={{ display: "flex", height: 600 }}>
+      <DataGrid
+        rows={rows}
+        pagination={true}
+        columns={columns}
+        pageSize={perPage}
+        filterMode="server"
+        rowCount={rowCount}
+        loading={isFetching}
+        paginationMode="server"
+        checkboxSelection={false}
+        disableColumnFilter={true}
+        disableColumnSelector={true}
+        disableDensitySelector={true}
+        rowsPerPageOptions={rowsPerPage}
+        componentsProps={componentProps}
+        onPageChange={handleOnPageChange}
+        components={{ Toolbar: GridToolbar }}
+        onFilterModelChange={handleFilterChange}
+        onPageSizeChange={handleOnPageSizeChange}
+      />
+    </Box>
+  );
 }
