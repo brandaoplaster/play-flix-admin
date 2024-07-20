@@ -1,21 +1,39 @@
-import { Box, Button, IconButton, Typography } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { Box, Button } from "@mui/material";
 import { Link } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { useAppSelector } from "../../app/hooks";
 import {
-  deleteCategory,
   selectCategories,
+  useDeleteCategoryMutation,
   useGetCategoriesQuery,
 } from "./categorySlice";
+import { useEffect } from "react";
+import { useSnackbar } from "notistack";
+import { CategoryTable } from "./components/CategoryTable";
+import { GridFilterModel } from "@mui/x-data-grid";
 
 export const CategoryList = () => {
   const { data, isFetching, error } = useGetCategoriesQuery();
   const categories = useAppSelector(selectCategories);
-  const dispatch = useAppDispatch();
+  const { deleteCategory, deleteCategoryStatus } = useDeleteCategoryMutation();
+  const { enqueueSnackbar } = useSnackbar();
 
-  function handleDeleteCategory(id: string) {
-    dispatch(deleteCategory(id));
+  async function handleDeleteCategory(id: string) {
+    await deleteCategory({ id });
   }
+
+  useEffect(() => {
+    if (deleteCategoryStatus.isSuccess) {
+      enqueueSnackbar(`Category deleted`, { variant: "success" });
+    } else {
+      enqueueSnackbar(`Category not deleted`, { variant: "error" });
+    }
+  }, [deleteCategoryStatus, enqueueSnackbar]);
+
+  function handleOnPageChange(page: number) {}
+
+  function handleOnPageSizeChange(perPage: number) {}
+
+  function handleFilterChange(filterModel: GridFilterModel) {}
 
   return (
     <Box maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
@@ -30,19 +48,17 @@ export const CategoryList = () => {
           New Category
         </Button>
       </Box>
-      <Box sx={{ display: "flex", height: 600 }}>
-        {/* <DataGrid
-          rows={rows}
-          columns={columns}
-          disableColumnFilter={true}
-          disableColumnSelector={true}
-          disableDensitySelector={true}
-          disableSelectionOnClick={true}
-          componentsProps={componentProps}
-          components={{ Toolbar: GridToolbar }}
-          rowsPerPageOptions={[2, 20, 50, 100]}
-        /> */}
-      </Box>
+
+      <CategoryTable
+        data={data}
+        isFetching={isFetching}
+        handleDelete={handleDeleteCategory}
+        perPage={10}
+        rowsPerPage={[10, 20, 30]}
+        handleOnPageChange={handleOnPageChange}
+        handleOnPageSizeChange={handleOnPageSizeChange}
+        handleFilterChange={handleFilterChange}
+      />
     </Box>
   );
 };
