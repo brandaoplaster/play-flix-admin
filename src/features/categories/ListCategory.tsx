@@ -6,16 +6,24 @@ import {
   useDeleteCategoryMutation,
   useGetCategoriesQuery,
 } from "./categorySlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSnackbar } from "notistack";
 import { CategoryTable } from "./components/CategoryTable";
 import { GridFilterModel } from "@mui/x-data-grid";
 
 export const CategoryList = () => {
-  const { data, isFetching, error } = useGetCategoriesQuery();
   const categories = useAppSelector(selectCategories);
   const { deleteCategory, deleteCategoryStatus } = useDeleteCategoryMutation();
   const { enqueueSnackbar } = useSnackbar();
+
+  const { search, setSearch } = useState("");
+  const { page, setPage } = useState(1);
+  const { perPage, setPerPage } = useState(10);
+  const { rowsPerPage } = useState([10, 25, 50, 100]);
+
+  const options = { perPage, search, page };
+
+  const { data, isFetching, error } = useGetCategoriesQuery(options);
 
   async function handleDeleteCategory(id: string) {
     await deleteCategory({ id });
