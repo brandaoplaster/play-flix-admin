@@ -96,4 +96,5 @@ export const selectCategoryById = (state: RootState, id: string) => {
 
 export default categoriesSlice.reducer;
 
-export const { useGetCategoriesQuery, useDeleteCategory } = categoriesApiSlice;
+export const { useGetCategoriesQuery, useDeleteCategoryMutation } =
+  categoriesApiSlice;
