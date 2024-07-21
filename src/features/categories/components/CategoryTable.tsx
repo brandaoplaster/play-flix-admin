@@ -3,7 +3,6 @@ import {
   GridColDef,
   GridFilterModel,
   GridRenderCellParams,
-  GridRowsProp,
   GridToolbar,
 } from "@mui/x-data-grid";
 import { Results } from "../../../types/Category";
@@ -15,12 +14,12 @@ type Props = {
   data: Results | undefined;
   perPage: number;
   isFetching: boolean;
-  rowsPerPage?: number;
+  rowsPerPage?: number[];
 
   handleOnPageChange: (page: number) => void;
   handleFilterChange: (filterModel: GridFilterModel) => void;
   handleOnPageSizeChange: (perPage: number) => void;
-  handleDelete: (id: number) => void;
+  handleDelete: (id: string) => void;
 };
 
 export function CategoryTable({
@@ -67,15 +66,15 @@ export function CategoryTable({
     },
   ];
 
-  const rows: GridRowsProp = data
-    ? data.data.map((category) => ({
-        id: category.id,
-        name: category.name,
-        description: category.description,
-        isActive: category.is_active,
-        createdAt: category.created_at,
-      }))
-    : [];
+  // const rows: GridRowsProp = data
+  //   ? data.data.map((category) => ({
+  //       id: category.id,
+  //       name: category.name,
+  //       description: category.description,
+  //       isActive: category.is_active,
+  //       createdAt: category.created_at,
+  //     }))
+  //   : [];
 
   function mapDataToGridRows(data: Results) {
     const { data: categories } = data;
