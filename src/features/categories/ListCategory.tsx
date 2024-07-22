@@ -37,11 +37,21 @@ export const CategoryList = () => {
     }
   }, [deleteCategoryStatus, enqueueSnackbar]);
 
-  function handleOnPageChange(page: number) {}
+  function handleOnPageChange(page: number) {
+    setPage(page + 1);
+  }
 
-  function handleOnPageSizeChange(perPage: number) {}
+  function handleOnPageSizeChange(perPage: number) {
+    setPerPage(perPage);
+  }
 
-  function handleFilterChange(filterModel: GridFilterModel) {}
+  function handleFilterChange(filterModel: GridFilterModel) {
+    if (filterModel.quickFilterValues?.length) {
+      const search = filterModel.quickFilterValues.join("");
+      setSearch(search);
+    }
+    return setSearch("");
+  }
 
   return (
     <Box maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
