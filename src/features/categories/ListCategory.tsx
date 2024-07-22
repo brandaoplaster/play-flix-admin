@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import {
@@ -36,6 +36,10 @@ export const CategoryList = () => {
       enqueueSnackbar(`Category not deleted`, { variant: "error" });
     }
   }, [deleteCategoryStatus, enqueueSnackbar]);
+
+  if (error) {
+    return <Typography>Error featching categories</Typography>;
+  }
 
   function handleOnPageChange(page: number) {
     setPage(page + 1);
