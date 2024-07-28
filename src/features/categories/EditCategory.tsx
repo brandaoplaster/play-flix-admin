@@ -1,16 +1,25 @@
 import { Box, Paper, Typography } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { Category, selectCategoryById, updateCategory } from "./categorySlice";
-import { useState } from "react";
+import { useAppDispatch } from "../../app/hooks";
+import { Category, updateCategory, useGetCategoryQuery } from "./categorySlice";
+import { useEffect, useState } from "react";
 import { CategoryForm } from "./components/CategoryForm";
 import { useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
 
 export const EditCategory = () => {
   const id = useParams().id || "";
-  const category = useAppSelector((state) => selectCategoryById(state, id));
+  const { data: category, isFetching } = useGetCategoryQuery({ id });
+  const [categoryState, setCategoryState] = useState<Category>({
+    id: "",
+    name: "",
+    description: "",
+    is_active: false,
+    created_at: "",
+    deleted_at: "",
+    updated_at: "",
+  });
+
   const [isdisabled, setIsdisabled] = useState(false);
-  const [categoryState, setCategoryState] = useState<Category>(category);
   const dispatch = useAppDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -29,6 +38,12 @@ export const EditCategory = () => {
     dispatch(updateCategory(categoryState));
     enqueueSnackbar("Category updated successfully", { variant: "success" });
   }
+
+  useEffect(() => {
+    if (category) {
+      setCategoryState(category.data);
+    }
+  }, [category]);
 
   return (
     <Box>
