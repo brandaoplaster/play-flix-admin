@@ -2,6 +2,7 @@ import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import counterReducer from "../features/counter/counterSlice";
 import { apiSlice } from "../features/api/apiSlice";
 import { categoriesApiSlice } from "../features/categories/categorySlice";
+import { castMembersSlice } from "../features/cast/castMembersSlice";
 
 export const store = configureStore({
   reducer: {
@@ -9,6 +10,7 @@ export const store = configureStore({
     categories: categories,
     [apiSlice.reducerPath]: apiSlice.reducer,
     [categoriesApiSlice.reducerPath]: apiSlice.reducer,
+    [castMembersSlice.reducerPath]: apiSlice.reducer
   },
 });
 
