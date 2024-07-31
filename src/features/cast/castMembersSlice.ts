@@ -55,4 +55,4 @@ export const castMembersSlice = apiSlice.injectEndpoints({
   }),
 });
 
-const { useGetCastMembersQuery } = castMembersSlice;
+export const { useGetCastMembersQuery } = castMembersSlice;
