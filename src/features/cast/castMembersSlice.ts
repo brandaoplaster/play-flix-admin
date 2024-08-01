@@ -1,5 +1,3 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "../../app/store";
 import { apiSlice } from "../api/apiSlice";
 import {
   CastMember,
@@ -58,17 +56,62 @@ function deleteCastMember({ id }: { id: string }) {
   };
 }
 
+function createCastMember(castMember: CastMember) {
+  return {
+    method: "POST",
+    url: endpointUrl,
+    body: castMember,
+  };
+}
+
+function updateCastMember(castMember: CastMember) {
+  return {
+    method: "PUT",
+    url: `${endpointUrl}/${castMember.id}`,
+    body: castMember,
+  };
+}
+
+function getCastMember({ id }: { id: string }) {
+  return {
+    method: "GET",
+    url: `${endpointUrl}/${id}`,
+  };
+}
+
 export const castMembersSlice = apiSlice.injectEndpoints({
   endpoints: ({ query, mutation }) => ({
     getCastMembers: query<Results, CastMemberParams>({
       query: getCastMembers,
       providesTags: ["CastMembers"],
     }),
+
     deleteCastMember: mutation<Result, { id: string }>({
       query: deleteCastMember,
       invalidatesTags: ["CastMembers"],
     }),
+
+    createCastMember: mutation<Result, CastMember>({
+      query: createCastMember,
+      invalidatesTags: ["CastMembers"],
+    }),
+
+    updateCastMember: mutation<Result, CastMember>({
+      query: updateCastMember,
+      invalidatesTags: ["CastMembers"],
+    }),
+
+    getCastMember: query<Result, { id: string }>({
+      query: getCastMember,
+      providesTags: ["CastMembers"],
+    }),
   }),
 });
 
-export const { useGetCastMembersQuery, useDeleteCastMemberMutation } = castMembersSlice;
+export const {
+  useGetCastMembersQuery,
+  useDeleteCastMemberMutation,
+  useCreateCastMemberMutation,
+  useUpdateCastMemberMutation,
+  useGetCastMemberQuery,
+} = castMembersSlice;
