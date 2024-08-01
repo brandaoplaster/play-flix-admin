@@ -74,6 +74,13 @@ function updateCastMember(castMember: CastMember) {
   };
 }
 
+function getCastMember({ id }: { id: string }) {
+  return {
+    method: "GET",
+    url: `${endpointUrl}/${id}`,
+  };
+}
+
 export const castMembersSlice = apiSlice.injectEndpoints({
   endpoints: ({ query, mutation }) => ({
     getCastMembers: query<Results, CastMemberParams>({
@@ -95,6 +102,11 @@ export const castMembersSlice = apiSlice.injectEndpoints({
       query: updateCastMember,
       invalidatesTags: ["CastMembers"],
     }),
+
+    getCastMember: query<Result, { id: string }>({
+      query: getCastMember,
+      providesTags: ["CastMembers"],
+    }),
   }),
 });
 
@@ -102,5 +114,6 @@ export const {
   useGetCastMembersQuery,
   useDeleteCastMemberMutation,
   useCreateCastMemberMutation,
-  useUpdateCastMemberMutation
+  useUpdateCastMemberMutation,
+  useGetCastMemberQuery,
 } = castMembersSlice;
