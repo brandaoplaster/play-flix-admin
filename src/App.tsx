@@ -8,6 +8,9 @@ import { CreateCategory } from "./features/categories/CreateCategory";
 import { CategoryList } from "./features/categories/ListCategory";
 import { EditCategory } from "./features/categories/EditCategory";
 import { SnackbarProvider } from "notistack";
+import { ListCastMembers } from "./features/cast/ListCastMember";
+import { CreateCastMember } from "./features/cast/CreateCastMember";
+import { EditCastMember } from "./features/cast/EditCastMember";
 
 function App() {
   return (
@@ -28,6 +31,10 @@ function App() {
               <Route path="/categories" element={<CategoryList />} />
               <Route path="/categories/create" element={<CreateCategory />} />
               <Route path="/categories/edit/:id" element={<EditCategory />} />
+
+              <Route path="/" element={<ListCastMembers />} />
+              <Route path="/cast-members/create" element={<CreateCastMember />} />
+              <Route path="/cast-members/edit/:id" element={<EditCastMember />} />
             </Routes>
           </Layout>
         </Box>
