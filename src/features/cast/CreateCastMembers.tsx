@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { CastMember } from "../../types/CastMembers";
 import { initialState, useCreateCastMemberMutation } from "./castMembersSlice";
 import { useSnackbar } from "notistack";
+import { CastMemberForm } from "./components/CastMembersform";
 
 export const CreateCastMember = () => {
   const [castMemberState, setCastMemberState] =
@@ -37,6 +38,13 @@ export const CreateCastMember = () => {
             <Typography variant="h4">Create Cast Member</Typography>
           </Box>
         </Box>
+        <CastMemberForm
+          handleSubmit={handleSubmit}
+          handleChange={handleChange}
+          castMember={castMemberState}
+          isLoading={status.isLoading}
+          isdisabled={status.isLoading}
+        />
       </Paper>
     </Box>
   );

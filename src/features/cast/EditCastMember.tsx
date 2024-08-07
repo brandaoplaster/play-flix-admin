@@ -8,6 +8,7 @@ import {
 } from "./castMembersSlice";
 import { useParams } from "react-router-dom";
 import { CastMember } from "../../types/CastMembers";
+import { CastMemberForm } from "./components/CastMembersform";
 
 export const EditCastMember = () => {
   const id = useParams().id ?? "";
@@ -52,6 +53,13 @@ export const EditCastMember = () => {
             <Typography variant="h4">Edit Cast member</Typography>
           </Box>
         </Box>
+        <CastMemberForm
+          handleSubmit={handleSubmit}
+          handleChange={handleChange}
+          castMember={castMemberState}
+          isLoading={isFetching || status.isLoading}
+          isdisabled={status.isLoading}
+        />
       </Paper>
     </Box>
   );
