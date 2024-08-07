@@ -7,6 +7,7 @@ import {
   useGetCastMembersQuery,
 } from "./castMembersSlice";
 import { useSnackbar } from "notistack";
+import { CastMembersTable } from "./components/CastMembersTable";
 
 export const ListCastMembers = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -67,6 +68,17 @@ export const ListCastMembers = () => {
           New Cast Member
         </Button>
       </Box>
+
+      <CastMembersTable
+        data={data}
+        perPage={options.perPage}
+        isFetching={isFetching}
+        rowsPerPage={options.rowsPerPage}
+        handleDelete={handleDeleteCastMember}
+        handleOnPageChange={handleOnPageChange}
+        handleOnPageSizeChange={handleOnPageSizeChange}
+        handleFilterChange={handleFilterChange}
+      />
     </Box>
   );
 };
