@@ -1,27 +1,35 @@
+import {
+  Category,
+  useGetCategoryQuery,
+  useUpdateCategoryMutation,
+} from "./categorySlice";
 import { Box, Paper, Typography } from "@mui/material";
-import { useAppDispatch } from "../../app/hooks";
-import { Category, updateCategory, useGetCategoryQuery } from "./categorySlice";
 import { useEffect, useState } from "react";
 import { CategoryForm } from "./components/CategoryForm";
 import { useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
 
 export const EditCategory = () => {
-  const id = useParams().id || "";
+  const id = useParams().id as string;
   const { data: category, isFetching } = useGetCategoryQuery({ id });
+  const [isdisabled, setIsdisabled] = useState(false);
+  const [updateCategory, status] = useUpdateCategoryMutation();
   const [categoryState, setCategoryState] = useState<Category>({
     id: "",
     name: "",
-    description: "",
     is_active: false,
     created_at: "",
-    deleted_at: "",
     updated_at: "",
+    deleted_at: "",
+    description: "",
   });
 
-  const [isdisabled, setIsdisabled] = useState(false);
-  const dispatch = useAppDispatch();
   const { enqueueSnackbar } = useSnackbar();
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    await updateCategory(categoryState);
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -33,17 +41,21 @@ export const EditCategory = () => {
     setCategoryState({ ...categoryState, [name]: checked });
   };
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    dispatch(updateCategory(categoryState));
-    enqueueSnackbar("Category updated successfully", { variant: "success" });
-  }
-
   useEffect(() => {
     if (category) {
       setCategoryState(category.data);
     }
   }, [category]);
+
+  useEffect(() => {
+    if (status.isSuccess) {
+      enqueueSnackbar("Category updated successfully", { variant: "success" });
+      setIsdisabled(false);
+    }
+    if (status.error) {
+      enqueueSnackbar("Category not updated", { variant: "error" });
+    }
+  }, [enqueueSnackbar, status.error, status.isSuccess]);
 
   return (
     <Box>
