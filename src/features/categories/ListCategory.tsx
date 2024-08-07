@@ -1,60 +1,58 @@
 import { Box, Button, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useAppSelector } from "../../app/hooks";
+import { CategoryTable } from "./components/CategoryTable";
+import { GridFilterModel } from "@mui/x-data-grid";
 import {
-  selectCategories,
   useDeleteCategoryMutation,
   useGetCategoriesQuery,
 } from "./categorySlice";
-import { useEffect, useState } from "react";
 import { useSnackbar } from "notistack";
-import { CategoryTable } from "./components/CategoryTable";
-import { GridFilterModel } from "@mui/x-data-grid";
 
 export const CategoryList = () => {
-  const categories = useAppSelector(selectCategories);
-  const { deleteCategory, deleteCategoryStatus } = useDeleteCategoryMutation();
   const { enqueueSnackbar } = useSnackbar();
-
-  const { search, setSearch } = useState("");
-  const { page, setPage } = useState(1);
-  const { perPage, setPerPage } = useState(10);
-  const { rowsPerPage } = useState([10, 25, 50, 100]);
-
-  const options = { perPage, search, page };
-
+  const [options, setOptions] = useState({
+    page: 1,
+    search: "",
+    perPage: 10,
+    rowsPerPage: [10, 20, 30],
+  });
   const { data, isFetching, error } = useGetCategoriesQuery(options);
+  const [deleteCategory, { error: deleteError, isSuccess: deleteSuccess }] =
+    useDeleteCategoryMutation();
+
+  function handleOnPageChange(page: number) {
+    setOptions({ ...options, page: page + 1 });
+  }
+
+  function handleOnPageSizeChange(perPage: number) {
+    setOptions({ ...options, perPage });
+  }
+
+  function handleFilterChange(filterModel: GridFilterModel) {
+    if (!filterModel.quickFilterValues?.length) {
+      return setOptions({ ...options, search: "" });
+    }
+
+    const search = filterModel.quickFilterValues.join("");
+    setOptions({ ...options, search });
+  }
 
   async function handleDeleteCategory(id: string) {
     await deleteCategory({ id });
   }
 
   useEffect(() => {
-    if (deleteCategoryStatus.isSuccess) {
+    if (deleteSuccess) {
       enqueueSnackbar(`Category deleted`, { variant: "success" });
-    } else {
+    }
+    if (deleteError) {
       enqueueSnackbar(`Category not deleted`, { variant: "error" });
     }
-  }, [deleteCategoryStatus, enqueueSnackbar]);
+  }, [deleteSuccess, deleteError, enqueueSnackbar]);
 
   if (error) {
-    return <Typography>Error featching categories</Typography>;
-  }
-
-  function handleOnPageChange(page: number) {
-    setPage(page + 1);
-  }
-
-  function handleOnPageSizeChange(perPage: number) {
-    setPerPage(perPage);
-  }
-
-  function handleFilterChange(filterModel: GridFilterModel) {
-    if (filterModel.quickFilterValues?.length) {
-      const search = filterModel.quickFilterValues.join("");
-      setSearch(search);
-    }
-    return setSearch("");
+    return <Typography>Error fetching categories</Typography>;
   }
 
   return (
