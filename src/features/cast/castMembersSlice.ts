@@ -79,7 +79,7 @@ function getCastMember({ id }: { id: string }) {
   };
 }
 
-export const castMembersSlice = apiSlice.injectEndpoints({
+export const castMembersApiSlice = apiSlice.injectEndpoints({
   endpoints: ({ query, mutation }) => ({
     getCastMembers: query<Results, CastMemberParams>({
       query: getCastMembers,
@@ -114,4 +114,4 @@ export const {
   useCreateCastMemberMutation,
   useUpdateCastMemberMutation,
   useGetCastMemberQuery,
-} = castMembersSlice;
+} = castMembersApiSlice;
