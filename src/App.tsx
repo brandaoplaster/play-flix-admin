@@ -11,6 +11,9 @@ import { SnackbarProvider } from "notistack";
 import { ListCastMembers } from "./features/cast/ListCastMember";
 import { CreateCastMember } from "./features/cast/CreateCastMembers";
 import { EditCastMember } from "./features/cast/EditCastMember";
+import { GenreList } from "./features/genre/GenreList";
+import { GenreCreate } from "./features/genre/GenreCreate";
+import { GenreEdit } from "./features/genre/GenreEdit";
 
 function App() {
   return (
@@ -32,9 +35,13 @@ function App() {
               <Route path="/categories/create" element={<CreateCategory />} />
               <Route path="/categories/edit/:id" element={<EditCategory />} />
 
-              <Route path="/" element={<ListCastMembers />} />
+              <Route path="/cast-members" element={<ListCastMembers />} />
               <Route path="/cast-members/create" element={<CreateCastMember />} />
               <Route path="/cast-members/edit/:id" element={<EditCastMember />} />
+
+              <Route path="/genres" element={<GenreList />} />
+              <Route path="/genres/create" element={<GenreCreate />} />
+              <Route path="/genres/edit/:id" element={<GenreEdit />} />
             </Routes>
           </Layout>
         </Box>
