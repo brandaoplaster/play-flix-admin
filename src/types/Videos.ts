@@ -27,3 +27,52 @@ export interface Video {
   trailer_file_url: string;
   video_file_url: string;
 }
+
+export interface Results {
+  data: Video[];
+  links: Links;
+  meta: Meta;
+}
+
+export interface Result {
+  data: Video;
+  links: Links;
+  meta: Meta;
+}
+
+export interface Links {
+  first: string;
+  last: string;
+  prev: null;
+  next: string;
+}
+
+export interface Meta {
+  to?: number;
+  from?: number;
+  path?: string;
+  total?: number;
+  per_page?: number;
+  last_page?: number;
+  current_page?: number;
+}
+
+export interface VideoParams {
+  page?: number;
+  perPage?: number;
+  search?: string;
+  isActive?: boolean;
+}
+
+export interface VideoPayload {
+  id?: string;
+  title: string;
+  rating: string;
+  opened: boolean;
+  duration: string;
+  description: string;
+  genres_id?: string[];
+  year_launched: string;
+  categories_id?: string[];
+  cast_members_id?: string[];
+}
