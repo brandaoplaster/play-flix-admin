@@ -1,33 +1,41 @@
 import { Box, Paper, Typography } from "@mui/material";
 import { VideosForm } from "./components/VideosForm";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
-import { FileObject, Video } from "../../types/Videos";
-import { useAppDispatch } from "../../app/hooks";
-import { useUniqueCategories } from "../../hooks/useUniqueCategories";
-import { nanoid } from "nanoid";
 import {
   initialState,
-  useCreateVideoMutation,
   useGetAllCastMembersQuery,
   useGetAllGenresQuery,
+  useGetVideoQuery,
+  useUpdateVideoMutation,
 } from "./VideoSlice";
+import { FileObject, Video } from "../../types/Videos";
+import { useUniqueCategories } from "../../hooks/useUniqueCategories";
 import { mapVideoToForm } from "./helper";
 
-
-export const VideosCreate = () => {
+export function VideosEdit() {
+  const id = useParams<{ id: string }>().id as string;
   const { enqueueSnackbar } = useSnackbar();
   const { data: genres } = useGetAllGenresQuery();
   const { data: castMembers } = useGetAllCastMembersQuery();
-  const [createVideo, status] = useCreateVideoMutation();
+  const { data: video, isFetching } = useGetVideoQuery({ id });
+  const [updateVideo, status] = useUpdateVideoMutation();
   const [videoState, setVideoState] = useState<Video>(initialState);
-  const [caregories] = useUniqueCategories(videoState, setVideoState);
   const [selectedFiles, setSelectedFiles] = useState<FileObject[]>([]);
-  const dispatch = useAppDispatch();
+  const [categories, setCategories] = useUniqueCategories(
+    videoState,
+    setVideoState
+  );
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
     setVideoState((state) => ({ ...state, [name]: value }));
+  }
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    await updateVideo(mapVideoToForm(videoState));
   }
 
   function handleAddFile({ name, file }: FileObject) {
@@ -38,31 +46,20 @@ export const VideosCreate = () => {
     setSelectedFiles(selectedFiles.filter((file) => file.name !== name));
   }
 
-  function handleSubmitUploads(videoId: string) {
-    selectedFiles.forEach(({ file, name }) => {
-      const payload = { id: nanoid(), file, videoId, field: name };
-      dispatch(addUpload(payload));
-    });
-  }
-
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const { id, ...payload } = mapVideoToForm(videoState);
-    try {
-      const { data } = await createVideo(payload).unwrap();
-      handleSubmitUploads(data.id);
-    } catch (e) {
-      enqueueSnackbar(`Error creating Video`, { variant: "error" });
+  useEffect(() => {
+    if (video) {
+      setVideoState(video.data);
+      setCategories(video.data.categories || []);
     }
-  }
+  }, [video, setCategories]);
 
   useEffect(() => {
     if (status.isSuccess) {
-      enqueueSnackbar(`Video created`, { variant: "success" });
+      enqueueSnackbar(`Video updated`, { variant: "success" });
     }
 
     if (status.isError) {
-      enqueueSnackbar(`Error creating Video`, { variant: "error" });
+      enqueueSnackbar(`Error updating Video`, { variant: "error" });
     }
   }, [status, enqueueSnackbar]);
 
@@ -71,16 +68,16 @@ export const VideosCreate = () => {
       <Paper>
         <Box p={2}>
           <Box mb={2}>
-            <Typography variant="h4">Create Video</Typography>
+            <Typography variant="h4">Edit Video</Typography>
           </Box>
         </Box>
 
         <VideosForm
           video={videoState}
-          categories={caregories}
           genres={genres?.data}
-          isLoading={status.isLoading}
-          isDisabled={status.isLoading}
+          isLoading={isFetching}
+          isDisabled={isFetching}
+          categories={categories}
           castMembers={castMembers?.data}
           handleChange={handleChange}
           handleSubmit={handleSubmit}
@@ -90,4 +87,4 @@ export const VideosCreate = () => {
       </Paper>
     </Box>
   );
-};
+}

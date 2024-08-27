@@ -40,6 +40,18 @@ function getAllCastMembers() {
   return `cast_members?all=true`;
 }
 
+function getVideo({ id }: { id: string }) {
+  return `${endpointUrl}/${id}`;
+}
+
+function updateVideo(video: VideoPayload) {
+  return {
+    url: `${endpointUrl}/${video.id}`,
+    method: "PUT",
+    body: video,
+  };
+}
+
 export const videosSlice = apiSlice.injectEndpoints({
   endpoints: ({ query, mutation }) => ({
     createVideo: mutation<Result, VideoPayload>({
@@ -56,6 +68,16 @@ export const videosSlice = apiSlice.injectEndpoints({
       query: getAllCastMembers,
       providesTags: ["CastMembers"],
     }),
+
+    getVideo: query<Result, { id: string }>({
+      query: getVideo,
+      providesTags: ["Videos"],
+    }),
+
+    updateVideo: mutation<Result, VideoPayload>({
+      query: updateVideo,
+      invalidatesTags: ["Videos"],
+    }),
   }),
 });
 
@@ -63,4 +85,6 @@ export const {
   useGetAllGenresQuery,
   useGetAllCastMembersQuery,
   useCreateVideoMutation,
+  useGetVideoQuery,
+  useUpdateVideoMutation,
 } = videosSlice;
