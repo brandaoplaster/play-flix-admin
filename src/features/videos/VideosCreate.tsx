@@ -12,6 +12,7 @@ import {
   useGetAllCastMembersQuery,
   useGetAllGenresQuery,
 } from "./VideoSlice";
+import { mapVideoToForm } from "./helper";
 
 
 export const VideosCreate = () => {
